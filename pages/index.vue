@@ -57,42 +57,31 @@
 
 import Swal from 'sweetalert2';
 const router = useRouter();
-const route = useRoute();
-const cookie_token = useCookie('token')
 
+onBeforeMount(async () => {
 
-const { sdk } = await UseGetAccount()
-
-
-
-onBeforeMount(() => {
-    let promise = sdk.account.get();
-
-    promise.then(
-        function (response) {
-            
-            useState("globalProfile", () => response);
-
+    try {
+        
+        const account_data = await UseGetAccountBySession()
+        if (account_data.$id && account_data.email) {
+            useState("globalProfile", () => account_data);
             return navigateTo("/dashboard");
-        },
-        function (error) {
-
         }
-    );
-    
+
+    } catch (error) {
+
+    }
+
+
 });
-
-const profile = useState("globalProfile");
-
 
 
 const signin = async (data) => {
 
 
-    const account_session = await UseCreateAccountSession(data.email, data.password)
+    const account_session = await UseCreateAccountBySession(data.email, data.password)
 
-
-    if (account_session?.$id && account_session?.userId) {
+    if (account_session) {
         Swal.fire({
             title: 'เข้าสู่ระบบสำเร็จ',
             text: "ขอบคุณที่เป็นส่วนหนึ่งของเรา",

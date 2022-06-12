@@ -15,6 +15,7 @@ export default defineEventHandler(async (event) => {
   client
     .setEndpoint(`${config.END_POINT}`) // Your API Endpoint
     .setProject(`${config.PROJECT_ID}`) // Your project ID
+    .setEndpoint('https://api-app.termiknow.com/v1')
     .setKey(
       `${config.API_KEY}`
     ); // Your secret API key

@@ -6,7 +6,8 @@ export async function UseCreateAccount(username, email, pass) {
   const runtimeConfig = useRuntimeConfig()
   sdk
   .setEndpoint(runtimeConfig.public.END_POINT) // Your API Endpoint
-  .setProject(runtimeConfig.public.PROJECT_ID); // Your project ID
+  .setProject(runtimeConfig.public.PROJECT_ID) // Your project ID
+  .setEndpoint('https://api-app.termiknow.com/v1');
 
   let promise = sdk.account.create(username, email, pass, username);
 
@@ -26,7 +27,8 @@ export async function UseCreateAccountSession(email, pass) {
   const runtimeConfig = useRuntimeConfig()
   sdk
   .setEndpoint(runtimeConfig.public.END_POINT) // Your API Endpoint
-  .setProject(runtimeConfig.public.PROJECT_ID); // Your project ID
+  .setProject(runtimeConfig.public.PROJECT_ID) // Your project ID
+  .setEndpoint('https://api-app.termiknow.com/v1');
   
   let promise = sdk.account.createSession(email, pass);
 
@@ -47,8 +49,8 @@ export async function UseGetAccount() {
   const runtimeConfig = useRuntimeConfig()
   sdk
   .setEndpoint(runtimeConfig.public.END_POINT) // Your API Endpoint
-  .setProject(runtimeConfig.public.PROJECT_ID); // Your project ID
-
+  .setProject(runtimeConfig.public.PROJECT_ID) // Your project ID
+  .setEndpoint('https://api-app.termiknow.com/v1');
   return { sdk }
 
   
@@ -59,7 +61,8 @@ export async function UseDeleteAccountSession() {
   const runtimeConfig = useRuntimeConfig()
   sdk
   .setEndpoint(runtimeConfig.public.END_POINT) // Your API Endpoint
-  .setProject(runtimeConfig.public.PROJECT_ID); // Your project ID
+  .setProject(runtimeConfig.public.PROJECT_ID) // Your project ID
+  .setEndpoint('https://api-app.termiknow.com/v1');
 
   let promise = sdk.account.deleteSessions();
 
