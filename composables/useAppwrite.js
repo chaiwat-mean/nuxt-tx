@@ -43,17 +43,16 @@ export async function UseCreateListDocument() {
     return response;
 }
 
-export async function UseGetDocumentBylistenDocument(){
+export async function UseGetDocumentByTx(tx){
 
     const { sdk } = await UseAppwriteSDK();
     const runtimeConfig = useRuntimeConfig();
 
+    let response = await sdk.database.listDocuments(
+      `${runtimeConfig.DOC_TX_ID}`,[Query.equal("transactionID", tx)]
+    );
+  
+    return response;
 
-    sdk.subscribe([`collections.${runtimeConfig.public.DOC_TX_ID}.documents`, ''], response => {
-
-        return response;
-
-
-    });
 
 }

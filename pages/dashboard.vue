@@ -12,7 +12,7 @@ onBeforeMount(async () => {
     try {
         
         const account_data = await UseGetAccountBySession()
-
+        useState("globalProfile", () => account_data);
     } catch (error) {
         return navigateTo("/");
     }

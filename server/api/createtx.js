@@ -1,40 +1,50 @@
-import { Appwrite } from "appwrite";
 import sdk from "node-appwrite";
+import { Query } from "appwrite";
 
 export default defineEventHandler(async (event) => {
-  // Init SDK
-  let client = new sdk.Client();
-
-  let database = new sdk.Database(client);
-
   const body = await useBody(event);
 
+  const client = new sdk.Client();
+  const database = new sdk.Database(client);
   const config = useRuntimeConfig();
-
-
   client
-    .setEndpoint(`${config.END_POINT}`) // Your API Endpoint
-    .setProject(`${config.PROJECT_ID}`) // Your project ID
-    .setEndpoint('https://api-app.termiknow.com/v1')
-    .setKey(
-      `${config.API_KEY}`
-    ); // Your secret API key
+    .setEndpoint(`${config.END_POINT}`)
+    .setProject(`${config.PROJECT_ID}`)
+    .setKey(`${config.API_KEY}`);
 
-  let create = await database.createDocument(
-    `${config.DOC_TX_ID}`,
-    "unique()",
+  let tx = null;
 
-    {
-      tx: body.tx,
-      datetime: new Date(),
-      amount: body.amount,
-      status: body.status,
-    }
-  );
-
-  return{
-      success: true,
-      data: create
+  if (body.transactionID) {
+    tx = body.transactionID;
+  } else if (body.transectionID) {
+    tx = body.transectionID;
   }
 
+  const currentdate = new Date();
+  var datetime =
+    currentdate.getDate() +
+    "/" +
+    (currentdate.getMonth() + 1) +
+    "/" +
+    currentdate.getFullYear() +
+    " @ " +
+    currentdate.getHours() +
+    ":" +
+    currentdate.getMinutes() +
+    ":" +
+    currentdate.getSeconds();
+
+  const create = await database.createDocument(`${config.DOC_TX_ID}`, "unique()", {
+    transactionID: tx,
+    datetime_create: datetime,
+    datetime_update: datetime,
+    amount: body.amount,
+    status: body.status,
+    from: "webhook",
+  });
+
+  return {
+    success: true,
+    data: create,
+  };
 });

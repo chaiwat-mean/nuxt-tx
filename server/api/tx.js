@@ -1,4 +1,4 @@
-import { Appwrite } from "appwrite";
+import { Appwrite,Query } from "appwrite";
 
 export default defineEventHandler(async (event) => {
 
