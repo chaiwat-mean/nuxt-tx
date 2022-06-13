@@ -26,9 +26,9 @@
                     clip-rule="evenodd"></path>
                 </svg>
               </div>
-              <input type="text" id="search-navbar"
+              <input v-model="tx" type="text" id="search-navbar"
                 class="block w-full p-2 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search...">
+                placeholder="Search transaction id">
             </div>
             <button data-collapse-toggle="mobile-menu-3" type="button"
               class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -55,9 +55,9 @@
                     clip-rule="evenodd"></path>
                 </svg>
               </div>
-              <input type="text" id="search-navbar"
+              <input v-model="tx" type="text" id="search-navbar"
                 class="block w-full p-2 pl-10 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search...">
+                placeholder="Search transaction id">
             </div>
             <ul class="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
               <li>
@@ -72,23 +72,19 @@
 
       <div class="grid grid-cols-6 gap-4 m-5">
         <div class="col-span-4 col-start-2">
-          <select
+          <select v-model="status_tx" @change="change_status"
             class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer text-center">
             <option selected>Status</option>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="DE">Germany</option>
+            <option value="OK">Status : OK</option>
+            <option value="paysuccess">Status : paysuccess</option>
+            <option value="fail">Status : fail</option>
+            <option value="cancel">Status : cancel</option>
           </select>
         </div>
         <div class="col-span-4 col-start-2">
           <select
             class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer text-center">
             <option selected>Day</option>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="DE">Germany</option>
           </select>
         </div>
       </div>
@@ -109,7 +105,8 @@
                     </th>
                     <th class="h-20 p-5 bg-white">
                       <span
-                        class="block text-sm font-semibold uppercase text-body text-opacity-40 font-heading min-w-max">Last update</span>
+                        class="block text-sm font-semibold uppercase text-body text-opacity-40 font-heading min-w-max">Last
+                        update</span>
                     </th>
                     <th class="h-20 p-5 bg-white">
                       <span
@@ -138,7 +135,8 @@
                     <td class="p-0">
                       <div
                         class="flex items-center justify-center h-20 p-5 text-center border-t border-b border-gray-100 bg-blueGray-50">
-                        <span class="text-lg text-darkBlueGray-400 font-heading">{{ item.datetime_update }}</span>
+                        <span class="text-lg text-darkBlueGray-400 font-heading">{{item.datetime_update
+                        }}</span>
                       </div>
                     </td>
                     <td class="p-0">
@@ -150,7 +148,8 @@
                     <td class="p-0">
                       <div
                         class="flex items-center justify-center h-20 p-5 text-center border-t border-b border-gray-100 bg-blueGray-50">
-                        <span class="text-lg text-darkBlueGray-400 font-heading"><a class="link" href="">Detail</a></span>
+                        <span class="text-lg text-darkBlueGray-400 font-heading"><a class="link"
+                            href="">Detail</a></span>
                       </div>
                     </td>
                     <td class="p-0">
@@ -167,7 +166,7 @@
         </div>
       </div>
     </section>
-    
+
   </div>
 </template>
 
@@ -177,6 +176,8 @@
 const list_data_tx = ref(null);
 
 const tx = ref(null);
+
+const status_tx = ref("OK");
 
 
 const router = useRouter();
@@ -189,6 +190,18 @@ onBeforeMount(async () => {
 
 });
 
+watch(tx, async (newtx, oldtx) => {
+
+
+  if (!newtx) {
+    const respone_data = await UseCreateListDocument();
+    list_data_tx.value = respone_data
+  } else {
+    const respone_data = await UseGetDocumentByTx(newtx);
+    list_data_tx.value = respone_data
+  }
+
+})
 
 
 watchEffect(async () => {
@@ -222,7 +235,18 @@ watchEffect(async () => {
 })
 
 
+const change_status = async (event) => {
 
+  const respone_data = await UseCreateListDocumentByStatus(event.target.value);
+  list_data_tx.value = respone_data
+
+  if (event.target.value === "Status") {
+    const respone_data = await UseCreateListDocument();
+    list_data_tx.value = respone_data
+  }
+
+
+}
 
 
 const signout = async (data) => {

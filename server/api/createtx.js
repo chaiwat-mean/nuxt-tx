@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
     (currentdate.getMonth() + 1) +
     "/" +
     currentdate.getFullYear() +
-    " @ " +
+    " " +
     currentdate.getHours() +
     ":" +
     currentdate.getMinutes() +

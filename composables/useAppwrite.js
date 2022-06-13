@@ -56,3 +56,10 @@ export async function UseGetDocumentByTx(tx){
 
 
 }
+
+export async function UseCreateListDocumentByStatus(status) {
+  const { sdk } = await UseAppwriteSDK();
+  const runtimeConfig = useRuntimeConfig();
+  let response = await sdk.database.listDocuments(`${runtimeConfig.public.DOC_TX_ID}`,[Query.equal("status", status)]);
+  return response;
+}
