@@ -81,12 +81,12 @@
             <option value="cancel">Status : cancel</option>
           </select>
         </div>
-        <div class="col-span-4 col-start-2">
+        <!-- <div class="col-span-4 col-start-2">
           <select
             class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer text-center">
             <option selected>Day</option>
           </select>
-        </div>
+        </div> -->
       </div>
       <div class="container px-4 mx-auto">
         <div class="pt-12 pb-12 bg-white p-7 rounded-5xl">
@@ -105,8 +105,15 @@
                     </th>
                     <th class="h-20 p-5 bg-white">
                       <span
-                        class="block text-sm font-semibold uppercase text-body text-opacity-40 font-heading min-w-max">Last
-                        update</span>
+                        class="block text-sm font-semibold uppercase text-body text-opacity-40 font-heading min-w-max">
+                        Date
+                      </span>
+                    </th>
+                    <th class="h-20 p-5 bg-white">
+                      <span
+                        class="block text-sm font-semibold uppercase text-body text-opacity-40 font-heading min-w-max">
+                        Create Date
+                      </span>
                     </th>
                     <th class="h-20 p-5 bg-white">
                       <span
@@ -114,7 +121,7 @@
                     </th>
                     <th class="h-20 p-5 bg-white">
                       <span
-                        class="block text-sm font-semibold uppercase text-body text-opacity-40 font-heading min-w-max">Count</span>
+                        class="block text-sm font-semibold uppercase text-body text-opacity-40 font-heading min-w-max">Other</span>
                     </th>
                     <th class="h-20 p-5 bg-white">
                       <span
@@ -135,7 +142,14 @@
                     <td class="p-0">
                       <div
                         class="flex items-center justify-center h-20 p-5 text-center border-t border-b border-gray-100 bg-blueGray-50">
-                        <span class="text-lg text-darkBlueGray-400 font-heading">{{item.datetime_update
+                        <span class="text-lg text-darkBlueGray-400 font-heading">{{ item.date
+                        }}</span>
+                      </div>
+                    </td>
+                     <td class="p-0">
+                      <div
+                        class="flex items-center justify-center h-20 p-5 text-center border-t border-b border-gray-100 bg-blueGray-50">
+                        <span class="text-lg text-darkBlueGray-400 font-heading">{{ item.datetime_create
                         }}</span>
                       </div>
                     </td>
