@@ -20,14 +20,13 @@ export default defineEventHandler(async (event) => {
     tx = body.transectionID;
   }
 
-  const currentdate = new Date();
-  var date = currentdate.getDate() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getFullYear()
-  var datetime = currentdate.getDate() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getFullYear() + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+  const currenttime = new Date().toLocaleTimeString('th-TH');
+  const currentdate = new Date().toLocaleDateString('th-TH');
 
   const create = await database.createDocument(`${config.DOC_TX_ID}`, "unique()", {
     transactionID: tx,
-    date: date,
-    datetime_create: datetime,
+    date: currentdate,
+    datetime_create: currentdate + " " + currenttime,
     amount: body.amount,
     status: body.status,
     from: "webhook",

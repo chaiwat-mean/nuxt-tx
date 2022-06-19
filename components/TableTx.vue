@@ -74,24 +74,30 @@
         <div class="col-span-4 col-start-2">
           <select v-model="status_tx" @change="change_status"
             class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer text-center">
-            <option selected>Status</option>
+            <option selected>All Status</option>
             <option value="OK">Status : OK</option>
             <option value="paysuccess">Status : paysuccess</option>
             <option value="fail">Status : fail</option>
             <option value="cancel">Status : cancel</option>
           </select>
         </div>
-        <!-- <div class="col-span-4 col-start-2">
-          <select
+        <div class="col-span-4 col-start-2">
+          <select v-model="limit_select"  @change="change_limit"
             class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer text-center">
-            <option selected>Day</option>
+            <option selected>100</option>
+            <option value="80">80</option>
+            <option value="60">80</option>
+            <option value="40">40</option>
+            <option value="20">20</option>
+            <option value="5">5</option>
+
           </select>
-        </div> -->
+        </div>
       </div>
       <div class="container px-4 mx-auto">
         <div class="pt-12 pb-12 bg-white p-7 rounded-5xl">
           <h2 class="pl-10 text-3xl font-medium xl:pl-24 font-heading">
-            Transactions
+            Transactions ({{list_data_tx?.documents.length}})
           </h2>
           <div class="overflow-x-auto">
             <div class="inline-block min-w-full overflow-hidden">
@@ -193,12 +199,16 @@ const tx = ref(null);
 
 const status_tx = ref("OK");
 
+const date_select = ref("All Date");
+
+const limit_select = ref("100");
+
 
 const router = useRouter();
 
 onBeforeMount(async () => {
 
-  const respone_data = await UseCreateListDocument();
+  const respone_data = await UseGetListDocument();
 
   list_data_tx.value = respone_data
 
@@ -208,7 +218,7 @@ watch(tx, async (newtx, oldtx) => {
 
 
   if (!newtx) {
-    const respone_data = await UseCreateListDocument();
+    const respone_data = await UseGetListDocument();
     list_data_tx.value = respone_data
   } else {
     const respone_data = await UseGetDocumentByTx(newtx);
@@ -229,7 +239,7 @@ watchEffect(async () => {
 
     sdk.subscribe([`collections.${runtimeConfig.public.DOC_TX_ID}.documents`, ''], response => {
 
-      const respone_data = UseCreateListDocument();
+      const respone_data = UseGetListDocument();
 
 
       respone_data.then(function (response) {
@@ -250,18 +260,43 @@ watchEffect(async () => {
 
 
 const change_status = async (event) => {
-
-  const respone_data = await UseCreateListDocumentByStatus(event.target.value);
+  status_tx.value = event.target.value
+  const respone_data = await UseGetListDocumentByStatus(status_tx.value,limit_select.value);
   list_data_tx.value = respone_data
 
-  if (event.target.value === "Status") {
-    const respone_data = await UseCreateListDocument();
+  if (event.target.value === "All Status") {
+    const respone_data = await UseGetListDocument();
     list_data_tx.value = respone_data
   }
 
 
 }
 
+const change_date = async (event) => {
+  const respone_data = await UseGetListDocumentByDate(event.target.value);
+  list_data_tx.value = respone_data
+
+  if (event.target.value === "All Date") {
+    const respone_data = await UseGetListDocument();
+    list_data_tx.value = respone_data
+  }
+
+
+}
+
+const change_limit = async (event) => {
+  limit_select.value = event.target.value
+  const respone_data = await UseGetListDocumentByStatus(status_tx.value,limit_select.value);
+  list_data_tx.value = respone_data
+  
+
+  if (event.target.value === "100") {
+    const respone_data = await UseGetListDocument();
+    list_data_tx.value = respone_data
+  }
+
+
+}
 
 const signout = async (data) => {
   const deleteAccout = await UseDeleteAccountBySession()

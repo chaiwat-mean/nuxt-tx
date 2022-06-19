@@ -36,11 +36,18 @@ export async function UseCreateAccountBySession(email,pass) {
 }
 
 
-export async function UseCreateListDocument() {
+export async function UseGetListDocument(limit = 100) {
     const { sdk } = await UseAppwriteSDK();
     const runtimeConfig = useRuntimeConfig();
-    let response = await sdk.database.listDocuments(`${runtimeConfig.public.DOC_TX_ID}`);
+    let response = await sdk.database.listDocuments(`${runtimeConfig.public.DOC_TX_ID}`,[],limit,[],[],[],[],["DESC"]);
     return response;
+}
+
+export async function UseGetListDocumentBylimit(limit) {
+  const { sdk } = await UseAppwriteSDK();
+  const runtimeConfig = useRuntimeConfig();
+  let response = await sdk.database.listDocuments(`${runtimeConfig.public.DOC_TX_ID}`,[],limit,[],[],[],[],["DESC"]);
+  return response;
 }
 
 export async function UseGetDocumentByTx(tx){
@@ -57,9 +64,17 @@ export async function UseGetDocumentByTx(tx){
 
 }
 
-export async function UseCreateListDocumentByStatus(status) {
+export async function UseGetListDocumentByStatus(status,limit = 100) {
   const { sdk } = await UseAppwriteSDK();
   const runtimeConfig = useRuntimeConfig();
-  let response = await sdk.database.listDocuments(`${runtimeConfig.public.DOC_TX_ID}`,[Query.equal("status", status)]);
+  let response = await sdk.database.listDocuments(`${runtimeConfig.public.DOC_TX_ID}`,[Query.equal("status", status)],limit);
+  return response;
+}
+
+
+export async function UseGetListDocumentByDate(date) {
+  const { sdk } = await UseAppwriteSDK();
+  const runtimeConfig = useRuntimeConfig();
+  let response = await sdk.database.listDocuments(`${runtimeConfig.public.DOC_TX_ID}`,[Query.equal("date", date)]);
   return response;
 }
